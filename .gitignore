@@ -9,7 +9,9 @@ backend/venv/
 
 # Environment variables
 .env
+.env.local
 backend/.env
+frontend/.env.local
 
 # VS Code settings
 .vscode/

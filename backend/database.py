@@ -1,61 +1,26 @@
-# # database.py
-
-# from sqlalchemy import create_engine
-# from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import sessionmaker
-
-# # PostgreSQL Configuration
-# DB_USER = "postgres"
-# DB_PASSWORD = "Dubey123"
-# DB_HOST = "localhost"
-# DB_PORT = "5432"
-# DB_NAME = "scotlandyard"
-
-# SQLALCHEMY_DATABASE_URL = (
-#     f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-# )
-
-# # Engine
-# engine = create_engine(
-#     SQLALCHEMY_DATABASE_URL,
-#     pool_pre_ping=True,
-#     echo=False
-# )
-
-# # Session
-# SessionLocal = sessionmaker(
-#     autocommit=False,
-#     autoflush=False,
-#     bind=engine
-# )
-
-# # Base
-# Base = declarative_base()
-
-
-# database.py
-
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-# Render PostgreSQL URL
+# Use DATABASE_URL env var if set (production/Render), otherwise fall back to local Postgres
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Engine
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True,
-    echo=False
-)
+if DATABASE_URL:
+    # Render provides postgres:// but SQLAlchemy needs postgresql://
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+else:
+    # Local development fallback
+    DB_USER = os.getenv("DB_USER", "postgres")
+    DB_PASSWORD = os.getenv("DB_PASSWORD", "Dubey123")
+    DB_HOST = os.getenv("DB_HOST", "localhost")
+    DB_PORT = os.getenv("DB_PORT", "5432")
+    DB_NAME = os.getenv("DB_NAME", "scotlandyard")
+    DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-# Session
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True, echo=False)
 
-# Base
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 Base = declarative_base()
