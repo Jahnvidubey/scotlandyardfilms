@@ -6,3 +6,4 @@ pymysql
 sqlalchemy
 pillow
 python-multipart
+psycopg2-binary
