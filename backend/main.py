@@ -25,7 +25,7 @@ os.makedirs(IMAGES_DIR, exist_ok=True)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-    "https://scotlandyardfilms-2wdf.vercel.app/",
+    "https://scotlandyardfilms-2wdf.vercel.app",
     "http://localhost:5173",
     ],
     allow_credentials=True,
