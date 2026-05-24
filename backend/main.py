@@ -35,8 +35,14 @@ app.add_middleware(
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    print(f"Validation error: {exc.errors()}")
-    return JSONResponse(status_code=422, content={"detail": exc.errors()})
+    errors = []
+    for err in exc.errors():
+        clean = {k: (str(v) if k == "ctx" else v) for k, v in err.items()}
+        if "ctx" in clean and isinstance(clean["ctx"], dict):
+            clean["ctx"] = {k: str(v) for k, v in clean["ctx"].items()}
+        errors.append(clean)
+    print(f"Validation error: {errors}")
+    return JSONResponse(status_code=422, content={"detail": errors})
 
 def get_db():
     db = SessionLocal()
