@@ -4,7 +4,7 @@ import { api } from '@/lib/api';
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState({ username: 'admin', password: 'admin123' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
