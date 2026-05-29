@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { api } from '@/lib/api';
+import { api, imgUrl } from '@/lib/api';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ export default function AdminDashboard() {
                 {/* Cover thumbnail */}
                 <div className="w-20 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                   {p.coverImage ? (
-                    <img src={p.coverImage} alt={p.title} className="w-full h-full object-cover" />
+                    <img src={imgUrl(p.coverImage)} alt={p.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">No cover</div>
                   )}

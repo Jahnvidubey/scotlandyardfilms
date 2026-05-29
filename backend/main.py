@@ -16,6 +16,18 @@ import io
 
 models.Base.metadata.create_all(bind=engine)
 
+# Auto-create default admin on startup
+def init_admin():
+    db = SessionLocal()
+    try:
+        if not db.query(models.Admin).first():
+            db.add(models.Admin(username="admin", password_hash=hashlib.sha256("admin123".encode()).hexdigest()))
+            db.commit()
+    finally:
+        db.close()
+
+init_admin()
+
 app = FastAPI()
 
 # Serve uploaded images
@@ -24,24 +36,25 @@ os.makedirs(IMAGES_DIR, exist_ok=True)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-    "https://scotlandyardfilms-2wdf.vercel.app",
-    "http://localhost:5173",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     errors = []
     for err in exc.errors():
-        clean = {k: (str(v) if k == "ctx" else v) for k, v in err.items()}
-        if "ctx" in clean and isinstance(clean["ctx"], dict):
-            clean["ctx"] = {k: str(v) for k, v in clean["ctx"].items()}
+        clean = {}
+        for k, v in err.items():
+            if k == "ctx" and isinstance(v, dict):
+                clean[k] = {ck: str(cv) for ck, cv in v.items()}
+            else:
+                clean[k] = v
         errors.append(clean)
-    print(f"Validation error: {errors}")
     return JSONResponse(status_code=422, content={"detail": errors})
 
 def get_db():

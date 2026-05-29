@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { api } from '@/lib/api';
+import { api, imgUrl } from '@/lib/api';
 
 const CATEGORIES = ['Traditional Wedding', 'Destination Wedding', 'Pre-Wedding', 'Engagement', 'Reception', 'Birthday', 'Corporate', 'Other'];
 
@@ -164,7 +164,7 @@ export default function AdminProjectEditor() {
               <label className="text-sm font-medium text-gray-700">Cover Image</label>
               <div className="flex items-center gap-3">
                 {form.cover_image && (
-                  <img src={form.cover_image} alt="cover" className="w-20 h-14 object-cover rounded-lg border" />
+                  <img src={imgUrl(form.cover_image)} alt="cover" className="w-20 h-14 object-cover rounded-lg border" />
                 )}
                 <label className="cursor-pointer flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition">
                   {coverUploading ? 'Uploading...' : 'Upload Cover Photo'}
@@ -219,7 +219,7 @@ export default function AdminProjectEditor() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {imgs.map(img => (
                     <div key={img.id} className="relative group rounded-lg overflow-hidden bg-gray-100 aspect-square">
-                      <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
+                      <img src={imgUrl(img.src)} alt={img.alt} className="w-full h-full object-cover" />
                       {form.cover_image === img.src && (
                         <div className="absolute top-1 left-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded">Cover</div>
                       )}

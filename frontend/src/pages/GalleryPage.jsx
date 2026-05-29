@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { api } from '@/lib/api';
+import { api, imgUrl } from '@/lib/api';
 
 const GalleryPage = () => {
   const [filter, setFilter] = useState('all');
@@ -99,7 +99,7 @@ const GalleryPage = () => {
               className="gallery-item"
             >
               <Link to={`/project/${project.id}`}>
-                <img loading="lazy" className="w-full h-full object-cover" alt={project.title} src={project.coverImage?.startsWith('/') ? project.coverImage : "https://images.unsplash.com/photo-1675023112817-52b789fd2ef0"} />
+                <img loading="lazy" className="w-full h-full object-cover" alt={project.title} src={project.coverImage ? imgUrl(project.coverImage) : "https://images.unsplash.com/photo-1675023112817-52b789fd2ef0"} />
                 <div className="gallery-overlay">
                   <h3 className="text-lg font-semibold">{project.title}</h3>
                   <p className="text-sm opacity-80">{project.location} • {project.category}</p>

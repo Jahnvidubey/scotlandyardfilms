@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, MapPin, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { api } from '@/lib/api';
+import { api, imgUrl } from '@/lib/api';
 
 const ProjectPage = () => {
   const { id } = useParams();
@@ -68,7 +68,7 @@ const ProjectPage = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <img loading="lazy" className="w-full h-full object-cover" alt={project.title} src={project.coverImage?.startsWith('/') ? project.coverImage : "https://images.unsplash.com/photo-1614312385003-dcea7b8b6ab6"} />
+          <img loading="lazy" className="w-full h-full object-cover" alt={project.title} src={project.coverImage ? imgUrl(project.coverImage) : "https://images.unsplash.com/photo-1614312385003-dcea7b8b6ab6"} />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
           <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
             <h1 className="text-3xl md:text-5xl font-bold mb-4">{project.title}</h1>
@@ -124,7 +124,7 @@ const ProjectPage = () => {
                   animate: { opacity: 1, y: 0, transition: { duration: 0.6 } }
                 }}
               >
-                <img loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt={image.alt} src={image.src || "https://images.unsplash.com/photo-1495224814653-94f36c0a31ea"} />
+                <img loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt={image.alt} src={image.src ? imgUrl(image.src) : "https://images.unsplash.com/photo-1495224814653-94f36c0a31ea"} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                   <div className="p-4 text-white">
                     <h3 className="font-medium">{image.alt}</h3>
