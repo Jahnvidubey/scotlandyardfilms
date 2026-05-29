@@ -124,8 +124,8 @@ def submit_contact(contact: ContactRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/contacts")
-def get_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return db.query(models.Contact).offset(skip).limit(limit).all()
+def get_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), admin=Depends(require_auth)):
+    return db.query(models.Contact).order_by(models.Contact.id.desc()).offset(skip).limit(limit).all()
 
 # ─── Admin Auth ──────────────────────────────────────────────────────────────
 

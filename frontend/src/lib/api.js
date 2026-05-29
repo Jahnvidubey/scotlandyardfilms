@@ -17,7 +17,8 @@ export const api = {
   getProjects: () => fetch(`${BASE}/projects`).then(r => r.json()),
   getProject: (id) => fetch(`${BASE}/projects/${id}`).then(r => r.json()),
 
-  // Auth
+  getContacts: () =>
+    fetch(`${BASE}/contacts`, { headers: authHeaders() }).then(r => r.json()),
   login: (username, password) =>
     fetch(`${BASE}/admin/login`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username, password }) }).then(r => r.json()),
   logout: () =>
